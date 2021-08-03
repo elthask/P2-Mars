@@ -8,6 +8,7 @@ body {
   font-family: Arial;
   /* New Font */
   font-family: 'Space Mono', monospace;
+  align-items: center;
   min-height: 100vh;
   background-image: url("../images/starry-background.jpg");
 }
@@ -19,85 +20,6 @@ header {
 main {
   flex: 1;
   padding: 20px;
-}
-
-#root {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: stretch;
-  min-height: 100vh;
-}
-
-.rover-container {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-}
-
-.rover-card {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  background-image: url("../images/mars.jpg");
-  background-position: center;
-  background-size: 0;
-  background-repeat: no-repeat;
-  color: whitesmoke;
-  width: 300px;
-  height: 300px;
-  margin: 30px auto;
-  border-radius: 20px;
-  cursor: pointer;
-  box-shadow: 10px 10px 10px #B7410E;
-  /* font-family: 'Space Mono', monospace; */
-  opacity: 0.4;
-  transition: 3s;
-  background-color: black;
-}
-
-.rover-card:hover,
-.rover-card:focus,
-.rover-card:active {
-  background-size: 100%;
-  opacity: 1;
-  outline: none;
-}
-
-.card-title {
-  color: whitesmoke;
-}
-
-.photo-container {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-}
-
-.photo {
-  width: 80%;
-  margin: 30px auto;
-  border: 8px groove #B7410E;
-}
-
-.back-button {
-  display: block;
-  background-color: #B7410E;
-  color: whitesmoke;
-  padding: 5px 50px;
-  margin: 40px auto;
-  border-radius: 30px;
-  font-size: 1.5rem;
-  /* font-family: 'Space Mono', monospace; */
-  box-shadow: 0 0 30px whitesmoke;
-  cursor: pointer;
-}
-
-.back-button:hover,
-.back-button:focus {
-  border: 2px solid whitesmoke;
-  outline: none;
 }
 
 footer {

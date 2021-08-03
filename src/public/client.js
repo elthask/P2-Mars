@@ -1,14 +1,18 @@
-let store = {
-    user: { name: "Student" },
+let store = Immutable.Map({
+    user: Immutable.Map({
+        name: "Student"
+    }),
     apod: '',
-    rovers: ['Curiosity', 'Opportunity', 'Spirit'],
-}
+    // declare Immutable Array
+    rovers: Immutable.List(['Spirit', 'Opportunity', 'Curiosity']),
+})
 
 // add our markup to the page
 const root = document.getElementById('root')
 
 const updateStore = (store, newState) => {
-    store = Object.assign(store, newState)
+    // replace Object.assign with .merge
+    store = state.merge(newState)
     render(root, store)
 }
 
@@ -19,7 +23,10 @@ const render = async (root, state) => {
 
 // create content
 const App = (state) => {
-    let { rovers, apod } = state
+    let {
+        rovers,
+        apod
+    } = state
 
     return `
         <header></header>
@@ -72,7 +79,7 @@ const ImageOfTheDay = (apod) => {
     console.log(photodate.getDate(), today.getDate());
 
     console.log(photodate.getDate() === today.getDate());
-    if (!apod || apod.date === today.getDate() ) {
+    if (!apod || apod.date === today.getDate()) {
         getImageOfTheDay(store)
     }
 
@@ -95,11 +102,15 @@ const ImageOfTheDay = (apod) => {
 
 // Example API call
 const getImageOfTheDay = (state) => {
-    let { apod } = state
+    let {
+        apod
+    } = state
 
     fetch(`http://localhost:3000/apod`)
         .then(res => res.json())
-        .then(apod => updateStore(store, { apod }))
+        .then(apod => updateStore(store, {
+            apod
+        }))
 
     return data
 }
