@@ -1,6 +1,6 @@
 let store = Immutable.Map({
     user: Immutable.Map({
-        name: "Student"
+        name: "Francisco"
     }),
     apod: '',
     // declare Immutable Array
@@ -10,7 +10,7 @@ let store = Immutable.Map({
 // add our markup to the page
 const root = document.getElementById('root')
 
-const updateStore = (store, newState) => {
+const updateStore = (state, newState) => {
     // replace Object.assign with .merge
     store = state.merge(newState)
     render(root, store)
@@ -20,18 +20,20 @@ const render = async (root, state) => {
     root.innerHTML = App(state)
 }
 
+// listening for load event because page should load before any JS is called
+window.addEventListener('load', () => {
+    render(root, store)
+})
 
 // create content
 const App = (state) => {
-    let {
-        rovers,
-        apod
-    } = state
-
+    let { rover } = state
     return `
-        <header></header>
+        <header>
+        <h2>This is the tile of the page</2>
+        </header>
         <main>
-            ${Greeting(store.user.name)}
+            ${Greeting(store.get("user").get("name"))}
             <section>
                 <h3>Put things on the page!</h3>
                 <p>Here is an example section.</p>
@@ -43,33 +45,43 @@ const App = (state) => {
                     explanation are returned. These keywords could be used as auto-generated hashtags for twitter or instagram feeds;
                     but generally help with discoverability of relevant imagery.
                 </p>
-                ${ImageOfTheDay(apod)}
+                ${ImageOfTheDay(store.get('apod'))}
             </section>
         </main>
-        <footer></footer>
+        <footer>This is a Footer</footer>
     `
 }
 
-// listening for load event because page should load before any JS is called
-window.addEventListener('load', () => {
-    render(root, store)
-})
-
 // ------------------------------------------------------  COMPONENTS
-
-// Pure function that renders conditional information -- THIS IS JUST AN EXAMPLE, you can delete it.
+//Loader
+const loader = () => {
+	const loaded = store.get("loaded")
+	if (loaded === false) {
+		return `
+		<div class="loader">
+		Loading...
+		</div>
+		`
+	} else {
+		return ``
+	}
+}
+// Pure function that renders conditional information
 const Greeting = (name) => {
+	const loaded = store.get("loaded");
+	if (loaded === true) {
     if (name) {
         return `
             <h1>Welcome, ${name}!</h1>
         `
     }
-
     return `
         <h1>Hello!</h1>
     `
+	} else {
+		return ``
+	}
 }
-
 // Example of a pure function that renders infomation requested from the backend
 const ImageOfTheDay = (apod) => {
 
@@ -100,17 +112,15 @@ const ImageOfTheDay = (apod) => {
 
 // ------------------------------------------------------  API CALLS
 
-// Example API call
+// Apod API Call
 const getImageOfTheDay = (state) => {
-    let {
-        apod
-    } = state
+    let { apod } = state
 
     fetch(`http://localhost:3000/apod`)
         .then(res => res.json())
-        .then(apod => updateStore(store, {
-            apod
-        }))
-
+        .then(apod => {
+			let loaded = true;
+			updateStore(store, { apod, loaded })
+		})
     return data
 }
