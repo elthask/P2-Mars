@@ -12,7 +12,7 @@ const root = document.getElementById('root')
 
 const updateStore = (state, newState) => {
     // replace Object.assign with .merge
-    store = state.merge(newState)
+    store = state.merge(Immutable.Map(newState));
     render(root, store)
 }
 
@@ -53,6 +53,7 @@ const App = (state) => {
 }
 
 // ------------------------------------------------------  COMPONENTS
+
 //Loader
 const loader = () => {
 	const loaded = store.get("loaded")
@@ -66,6 +67,7 @@ const loader = () => {
 		return ``
 	}
 }
+
 // Pure function that renders conditional information
 const Greeting = (name) => {
 	const loaded = store.get("loaded");
@@ -82,6 +84,7 @@ const Greeting = (name) => {
 		return ``
 	}
 }
+
 // Example of a pure function that renders infomation requested from the backend
 const ImageOfTheDay = (apod) => {
 
@@ -98,15 +101,15 @@ const ImageOfTheDay = (apod) => {
     // check if the photo of the day is actually type video!
     if (apod.media_type === "video") {
         return (`
-            <p>See today's featured video <a href="${apod.url}">here</a></p>
-            <p>${apod.title}</p>
-            <p>${apod.explanation}</p>
+            <p>See today's featured video <a href="${apod && apod.image.url}">here</a></p>
+            <p>${apod && apod.title.explanation}</p>
+            <p>${apod && apod.image.explanation}</p>
         `)
     } else {
-        return (`
-            <img src="${apod.image.url}" height="350px" width="100%" />
-            <p>${apod.image.explanation}</p>
-        `)
+        return `
+        <img src="${apod && apod.image.url}" height="350px" width="100%" />
+        <p>${apod && apod.image.explanation}</p>
+    `;
     }
 }
 
@@ -122,5 +125,4 @@ const getImageOfTheDay = (state) => {
 			let loaded = true;
 			updateStore(store, { apod, loaded })
 		})
-    return data
 }
